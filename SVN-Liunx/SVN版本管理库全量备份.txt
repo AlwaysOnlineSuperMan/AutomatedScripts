@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#function：SVN全量备份
+
+#Author： nings 
+
+svn_repos="/usr/subversion/svndata/repos1" #版本库目录
+
+backup_dir="/weblogic/weblogic/app/svn/svnBackUp" #备份目录
+
+next_backup_file="week_incremental_backup".`date +%Y%m%d`
+
+log="$backup_dir/week_backed_up.log" #日志文件
+
+echo "********************"`date`"***************">> $log
+
+echo "SVN ALL DUMP start!">> $log
+
+last_rev="`/usr/subversion/bin/svnlook youngest $svn_repos`" #最新版本
+
+if [ -f $next_backup_file ];then
+
+   echo "No new revisions to backup."
+   exit 0
+else
+
+/usr/subversion/bin/svnadmin dump --incremental --revision 0:$last_rev $svn_repos > $backup_dir/$next_backup_file #0版本，到最新版本的全量备份
+
+fi
+
+echo "Last:$last_rev">> $log #记录版本库最新版本
+
+#删除30天之前的备份数据
+
+find $backup_dir -type f -mtime +30  -exec rm -rf {} \; | tee -a $log 
+
+echo "********************"`date`"***************">>$log

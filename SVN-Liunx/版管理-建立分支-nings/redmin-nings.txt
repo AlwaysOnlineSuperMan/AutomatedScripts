@@ -1,0 +1,12 @@
+前提:createBranche-nings.bat 和 SVN-createBranchesModel-nings 在同一个目录下
+第一步：
+修改下面参数
+SET createBrancheMsg=创建分支描述信息
+SET createBrancheSeq=创建分支版本号
+第二步：
+执行 createBranche-nings.bat 会生成 branches/B***** 分支文件夹
+第三步：
+提交branches/B*****  分支文件夹到SVN 分支上。
+
+
+
